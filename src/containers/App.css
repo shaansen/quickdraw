@@ -1,0 +1,28 @@
+.App {
+  background-color: #2E4272;
+  text-align: center;
+  margin: auto;
+}
+
+.App-header {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  padding: 10px;
+}
+
+button{
+  width: 50px;
+}
+
+.ui-container{
+  background-color:#7887AB;
+  display:flex;
+  padding: 10px;
+}
+
+.palette{
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+}

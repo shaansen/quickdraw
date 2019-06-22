@@ -1,0 +1,10 @@
+.PaletteItem{
+    margin-bottom: 10px;
+  }
+  
+.highlight
+{ 
+  border-color: black; 
+  border-style: solid; 
+  background: yellow; 
+} 
