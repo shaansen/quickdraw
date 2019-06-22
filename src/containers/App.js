@@ -48,14 +48,12 @@ class App extends Component {
                         {this.actionButton({
                             icon: undoIcon,
                             name: "Undo",
-                            enabled: false,
-                            action: () => {}
+                            action: { type: "UNDO" }
                         })}
                         {this.actionButton({
                             icon: redoIcon,
                             name: "Redo",
-                            enabled: false,
-                            action: () => {}
+                            action: { type: "REDO" }
                         })}
                         {this.actionButton({
                             icon: newIcon,
@@ -94,8 +92,10 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    tool: state.tool
-});
+const mapStateToProps = state => {
+    return {
+        tool: state.tool
+    };
+};
 
 export default connect(mapStateToProps)(App);
