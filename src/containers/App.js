@@ -62,8 +62,7 @@ class App extends Component {
                         })}
                         {this.toolButton({
                             icon: deleteIcon,
-                            name: "Delete",
-                            enabled: false
+                            name: "Delete"
                         })}
                         {this.toolButton({
                             icon: moveIcon,

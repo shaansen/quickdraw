@@ -1,6 +1,17 @@
 import { combineReducers } from "redux";
 import { Actions } from "../actions";
 import { Elements } from "../elements";
+import { distToSegment } from "../elements/geometry";
+
+const getDeletedDoList = (x, currentDo) => {
+    for (let i = currentDo.length - 1; i >= 0; i--) {
+        const { p1, p2 } = currentDo[i].payload;
+        if (distToSegment(x, p1, p2) < 30) {
+            return i;
+        }
+    }
+    return -1;
+};
 
 const commands = (state = { do: [], redo: [], transient: [] }, action) => {
     let currentDo = [...state.do];
@@ -18,6 +29,13 @@ const commands = (state = { do: [], redo: [], transient: [] }, action) => {
                 do: [...state.do, action],
                 redo: [],
                 transient: []
+            };
+        case Actions.DELETE_ELEMENT:
+            const index = getDeletedDoList(action.payload.p1, currentDo);
+            currentDo = currentDo.filter((e, i) => i != index);
+            return {
+                ...state,
+                do: [...currentDo, action]
             };
         case Actions.NEW_DRAWING:
             return { do: [], redo: [], transient: [] };

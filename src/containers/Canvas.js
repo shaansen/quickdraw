@@ -1,5 +1,10 @@
 import { connect } from "react-redux";
-import { createElementAction, dragStart, dragFinish } from "../actions";
+import {
+    createElementAction,
+    dragStart,
+    dragFinish,
+    deleteElementAction
+} from "../actions";
 import runCommand from "../actions/runCommand";
 import Renderer from "../components/Renderer";
 
@@ -19,7 +24,12 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { createElementAction, dragStart, dragFinish };
+const mapDispatchToProps = {
+    createElementAction,
+    dragStart,
+    dragFinish,
+    deleteElementAction
+};
 
 export default connect(
     mapStateToProps,

@@ -1,4 +1,4 @@
-export default class CreateElementTool {
+export default class DeleteElementTool {
     handleMouseDown(props, pos) {
         props.dragStart(pos);
     }
@@ -17,7 +17,7 @@ export default class CreateElementTool {
     handleMouseUp(props, pos) {
         if (props.interaction.dragFrom) {
             props.dragFinish();
-            props.createElementAction({
+            props.deleteElementAction({
                 type: props.tool,
                 p1: props.interaction.dragFrom,
                 p2: pos
