@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import { Actions } from "../actions";
 import { Elements } from "../elements";
 import { nearOrOnLine, nearOrOnRectangleEdges } from "../elements/geometry";
+import * as R from "ramda";
 
 const deleteEntity = {
     Line: nearOrOnLine,
@@ -9,11 +10,17 @@ const deleteEntity = {
     Delete: null
 };
 
-const getDeletedDoList = (x, currentDo) => {
+const getClosestElementIndex = (x, currentDo) => {
+    const deletedEntities = R.clone(currentDo)
+        .filter(a => {
+            return a.payload.type === Elements.Delete;
+        })
+        .map(a => a.payload.itemIndex);
     for (let i = currentDo.length - 1; i >= 0; i--) {
         const actionType = currentDo[i].type;
-        const { p1, p2, type } = currentDo[i].payload;
+        const { p1, p2, type, id } = currentDo[i].payload;
         if (
+            !deletedEntities.includes(i) &&
             actionType == Actions.CREATE_ELEMENT &&
             deleteEntity[type] &&
             deleteEntity[type](x, p1, p2)
@@ -42,8 +49,9 @@ const commands = (state = { do: [], redo: [], transient: [] }, action) => {
                 transient: []
             };
         case Actions.DELETE_ELEMENT:
-            const index = getDeletedDoList(action.payload.p1, currentDo);
-            const updatedPayload = { ...action.payload, indexToDelete: index };
+        case Actions.MOVE_ELEMENT:
+            const index = getClosestElementIndex(action.payload.p1, currentDo);
+            const updatedPayload = { ...action.payload, itemIndex: index };
             lastAction = { ...action, payload: updatedPayload };
             if (index != -1) {
                 return {

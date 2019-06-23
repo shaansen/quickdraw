@@ -1,5 +1,5 @@
 import { registerActionAsCommand } from "./runCommand";
-import { createElement, deleteElement } from "../elements";
+import { createElement, deleteElement, moveElement } from "../elements";
 
 export const Actions = {
     CREATE_ELEMENT: "CREATE_ELEMENT",
@@ -9,17 +9,13 @@ export const Actions = {
     DRAG_FINISH: "DRAG_FINISH",
     SET_TOOL: "SET_TOOL",
     UNDO: "UNDO",
-    REDO: "REDO"
+    REDO: "REDO",
+    MOVE: "MOVE"
 };
 
 let nextElementId = 0;
 export const createElementAction = payload => ({
     type: Actions.CREATE_ELEMENT,
-    payload: { ...payload, id: nextElementId++ }
-});
-
-export const deleteElementAction = payload => ({
-    type: Actions.DELETE_ELEMENT,
     payload: { ...payload, id: nextElementId++ }
 });
 
@@ -30,8 +26,25 @@ registerActionAsCommand(Actions.CREATE_ELEMENT, (action, elements) => {
     );
 });
 
+export const deleteElementAction = payload => ({
+    type: Actions.DELETE_ELEMENT,
+    payload: { ...payload, id: nextElementId++ }
+});
+
 registerActionAsCommand(Actions.DELETE_ELEMENT, (action, elements) => {
     elements[action.payload.id] = deleteElement(
+        action.payload.type,
+        action.payload
+    );
+});
+
+export const moveElementAction = payload => ({
+    type: Actions.MOVE,
+    payload: { ...payload, id: nextElementId++ }
+});
+
+registerActionAsCommand(Actions.MOVE, (action, elements) => {
+    elements[action.payload.id] = moveElement(
         action.payload.type,
         action.payload
     );

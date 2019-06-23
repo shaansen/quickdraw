@@ -66,8 +66,7 @@ class App extends Component {
                         })}
                         {this.toolButton({
                             icon: moveIcon,
-                            name: "Move",
-                            enabled: false
+                            name: "Move"
                         })}
                         {this.toolButton({
                             icon: lineIcon,
@@ -75,8 +74,7 @@ class App extends Component {
                         })}
                         {this.toolButton({
                             icon: rectIcon,
-                            name: "Rect",
-                            enabled: true
+                            name: "Rect"
                         })}
                         {this.toolButton({
                             icon: ellipseIcon,

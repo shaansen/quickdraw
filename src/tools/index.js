@@ -1,5 +1,6 @@
 import CreateElementTool from "./CreateElementTool";
 import DeleteElementTool from "./DeleteElementTool";
+import MoveElementTool from "./MoveElementTool";
 
 import { Elements } from "../elements";
 
@@ -15,3 +16,4 @@ export const getTool = toolName => {
 registerTool(Elements.Line, new CreateElementTool());
 registerTool(Elements.Rect, new CreateElementTool());
 registerTool(Elements.Delete, new DeleteElementTool());
+registerTool(Elements.Move, new MoveElementTool());
