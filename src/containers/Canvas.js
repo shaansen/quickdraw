@@ -7,11 +7,19 @@ import {
 } from "../actions";
 import runCommand from "../actions/runCommand";
 import Renderer from "../components/Renderer";
+import { Actions } from "../actions";
 
 const processCommandsIntoElements = commands => {
     const elements = {};
-    for (const command of [...commands.do, ...commands.transient]) {
-        runCommand(command, elements);
+    const allDos = [...commands.do, ...commands.transient];
+    const dosToDelete = allDos
+        .filter(a => a.type == Actions.DELETE_ELEMENT)
+        .map(a => a.payload.indexToDelete);
+    for (let i = 0; i < allDos.length; i++) {
+        if (!dosToDelete.includes(i)) {
+            const command = allDos[i];
+            runCommand(command, elements);
+        }
     }
     return elements;
 };

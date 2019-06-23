@@ -1,12 +1,23 @@
 import { combineReducers } from "redux";
 import { Actions } from "../actions";
 import { Elements } from "../elements";
-import { distToSegment } from "../elements/geometry";
+import { nearOrOnLine, nearOrOnRectangleEdges } from "../elements/geometry";
+
+const deleteEntity = {
+    Line: nearOrOnLine,
+    Rect: nearOrOnRectangleEdges,
+    Delete: null
+};
 
 const getDeletedDoList = (x, currentDo) => {
     for (let i = currentDo.length - 1; i >= 0; i--) {
-        const { p1, p2 } = currentDo[i].payload;
-        if (distToSegment(x, p1, p2) < 30) {
+        const actionType = currentDo[i].type;
+        const { p1, p2, type } = currentDo[i].payload;
+        if (
+            actionType == Actions.CREATE_ELEMENT &&
+            deleteEntity[type] &&
+            deleteEntity[type](x, p1, p2)
+        ) {
             return i;
         }
     }
@@ -32,11 +43,15 @@ const commands = (state = { do: [], redo: [], transient: [] }, action) => {
             };
         case Actions.DELETE_ELEMENT:
             const index = getDeletedDoList(action.payload.p1, currentDo);
-            currentDo = currentDo.filter((e, i) => i != index);
-            return {
-                ...state,
-                do: [...currentDo, action]
-            };
+            const updatedPayload = { ...action.payload, indexToDelete: index };
+            lastAction = { ...action, payload: updatedPayload };
+            if (index != -1) {
+                return {
+                    ...state,
+                    do: [...state.do, lastAction]
+                };
+            }
+            return state;
         case Actions.NEW_DRAWING:
             return { do: [], redo: [], transient: [] };
         case Actions.UNDO:
