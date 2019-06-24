@@ -24,7 +24,11 @@ const processCommandsIntoElements = commands => {
 
     for (let i = 0; i < allCommands.length; i++) {
         let command = allCommands[i];
-        if (!dosToDelete.includes(i) && command.type !== Actions.MOVE) {
+        if (
+            !dosToDelete.includes(i) &&
+            command.type !== Actions.MOVE &&
+            command.payload.p1
+        ) {
             runCommand(command, elements);
         }
     }
