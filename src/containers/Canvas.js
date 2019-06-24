@@ -18,13 +18,13 @@ const processCommandsIntoElements = commands => {
 
     const dosToDelete = allCommands
         .filter(a => {
-            return a.type == Actions.DELETE_ELEMENT;
+            return a.type === Actions.DELETE_ELEMENT;
         })
         .map(a => a.payload.itemIndex);
 
     for (let i = 0; i < allCommands.length; i++) {
         let command = allCommands[i];
-        if (!dosToDelete.includes(i) && command.type != Actions.MOVE) {
+        if (!dosToDelete.includes(i) && command.type !== Actions.MOVE) {
             runCommand(command, elements);
         }
     }

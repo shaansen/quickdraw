@@ -43,7 +43,7 @@ const commands = (
                 currentDo[currentDo.length - 1].type === Actions.CREATE_ELEMENT
             ) {
                 lastAction = { ...action, payload: updatedPayload };
-                if (index != -1) {
+                if (index !== -1) {
                     return {
                         ...state,
                         do: [...currentDo, lastAction]
@@ -53,7 +53,7 @@ const commands = (
                 currentDo.pop();
                 lastAction = { ...action, payload: updatedPayload };
                 currentDo.push(lastAction);
-                if (index != -1) {
+                if (index !== -1) {
                     return {
                         ...state,
                         do: currentDo
@@ -65,7 +65,7 @@ const commands = (
             index = state.currentElement;
             updatedPayload = { ...action.payload, itemIndex: index };
             lastAction = { ...action, payload: updatedPayload };
-            if (index != -1) {
+            if (index !== -1) {
                 return {
                     ...state,
                     do: [...state.do, lastAction]
@@ -82,7 +82,7 @@ const commands = (
                     do: currentDo,
                     redo: currentRedo
                 };
-            } else if (currentTransient.length == 0 && currentDo.length > 0) {
+            } else if (currentTransient.length === 0 && currentDo.length > 0) {
                 lastAction = currentDo.pop();
                 mergeState = {
                     do: currentDo,
@@ -91,7 +91,7 @@ const commands = (
             }
             return { ...state, ...mergeState };
         case Actions.REDO:
-            if (currentTransient.length == 0 && currentRedo.length > 0) {
+            if (currentTransient.length === 0 && currentRedo.length > 0) {
                 lastAction = currentRedo.pop();
                 mergeState = {
                     do: [...currentDo, lastAction],

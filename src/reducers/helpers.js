@@ -14,7 +14,7 @@ const deleteEntity = {
 
 const deleteDeletedElements = currentDo => {
     let listOfDeletedIndexes = currentDo
-        .filter((a, i) => a.type == Actions.DELETE_ELEMENT)
+        .filter((a, i) => a.type === Actions.DELETE_ELEMENT)
         .map(a => a.payload.itemIndex);
 
     return currentDo.map((a, i) => {
@@ -28,7 +28,7 @@ const deleteDeletedElements = currentDo => {
 export const getLatestLocationsWithMoves = allCommands => {
     const moveMaps = findLastMovedElements(allCommands);
     return allCommands.map((command, i) => {
-        if (command && command.type != Actions.MOVE && moveMaps[i]) {
+        if (command && command.type !== Actions.MOVE && moveMaps[i]) {
             return getNewCommands(command, allCommands[moveMaps[i]]);
         }
         return command;
@@ -39,10 +39,10 @@ export const findLastMovedElements = dos => {
     const movedElements = {};
     for (let i = dos.length - 1; i >= 0; i--) {
         if (dos[i]) {
-            const { type, itemIndex } = dos[i].payload;
+            const { itemIndex } = dos[i].payload;
             if (
-                dos[i].type == Actions.MOVE &&
-                movedElements[itemIndex] == undefined
+                dos[i].type === Actions.MOVE &&
+                movedElements[itemIndex] === undefined
             ) {
                 movedElements[itemIndex] = i;
             }
