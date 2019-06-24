@@ -1,4 +1,6 @@
 export default class MoveElementTool {
+    handleMouseClick(props, pos) {}
+
     handleMouseDown(props, pos) {
         props.dragStart(pos);
     }
@@ -7,7 +9,7 @@ export default class MoveElementTool {
         if (props.interaction.dragFrom) {
             props.moveElementAction({
                 type: props.tool,
-                p1: props.interaction.dragFrom,
+                p1: pos,
                 p2: pos,
                 isTransient: true
             });
@@ -15,13 +17,6 @@ export default class MoveElementTool {
     }
 
     handleMouseUp(props, pos) {
-        if (props.interaction.dragFrom) {
-            props.dragFinish();
-            props.moveElementAction({
-                type: props.tool,
-                p1: props.interaction.dragFrom,
-                p2: pos
-            });
-        }
+        props.dragFinish();
     }
 }

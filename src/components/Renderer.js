@@ -51,6 +51,12 @@ export default class Renderer extends Component {
                             this.getMousePos(e)
                         );
                     }}
+                    onClick={e => {
+                        getTool(this.props.tool).handleMouseClick(
+                            this.props,
+                            this.getMousePos(e)
+                        );
+                    }}
                     onMouseMove={e => {
                         getTool(this.props.tool).handleMouseMove(
                             this.props,

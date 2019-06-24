@@ -1,4 +1,6 @@
 export default class CreateElementTool {
+    handleMouseClick(props, pos) {}
+
     handleMouseDown(props, pos) {
         props.dragStart(pos);
     }
@@ -16,7 +18,7 @@ export default class CreateElementTool {
 
     handleMouseUp(props, pos) {
         if (props.interaction.dragFrom) {
-            props.dragFinish();
+            props.dragFinish(pos);
             props.createElementAction({
                 type: props.tool,
                 p1: props.interaction.dragFrom,

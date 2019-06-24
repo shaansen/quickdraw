@@ -2,42 +2,31 @@ import { combineReducers } from "redux";
 import { Actions } from "../actions";
 import { Elements } from "../elements";
 import { nearOrOnLine, nearOrOnRectangleEdges } from "../elements/geometry";
-import * as R from "ramda";
+import { getElementToMoveIndex } from "./helpers";
 
-const deleteEntity = {
-    Line: nearOrOnLine,
-    Rect: nearOrOnRectangleEdges,
-    Delete: null
-};
-
-const getClosestElementIndex = (x, currentDo) => {
-    const deletedEntities = R.clone(currentDo)
-        .filter(a => {
-            return a.payload.type === Elements.Delete;
-        })
-        .map(a => a.payload.itemIndex);
-    for (let i = currentDo.length - 1; i >= 0; i--) {
-        const actionType = currentDo[i].type;
-        const { p1, p2, type, id } = currentDo[i].payload;
-        if (
-            !deletedEntities.includes(i) &&
-            actionType == Actions.CREATE_ELEMENT &&
-            deleteEntity[type] &&
-            deleteEntity[type](x, p1, p2)
-        ) {
-            return i;
-        }
-    }
-    return -1;
-};
-
-const commands = (state = { do: [], redo: [], transient: [] }, action) => {
+const commands = (
+    state = { do: [], redo: [], transient: [], currentElement: null },
+    action
+) => {
     let currentDo = [...state.do];
     let currentRedo = [...state.redo];
     let currentTransient = [...state.transient];
     let lastAction = null;
     let mergeState = {};
+    let index = null;
+    let updatedPayload = null;
+
     switch (action.type) {
+        case Actions.DRAG_START:
+            return {
+                ...state,
+                currentElement: getElementToMoveIndex(action, currentDo)
+            };
+        case Actions.DRAG_FINISH:
+            return {
+                ...state,
+                currentElement: null
+            };
         case Actions.CREATE_ELEMENT:
             if (action.payload.isTransient) {
                 return { ...state, transient: [action] };
@@ -48,10 +37,35 @@ const commands = (state = { do: [], redo: [], transient: [] }, action) => {
                 redo: [],
                 transient: []
             };
+        case Actions.MOVE:
+            index = state.currentElement;
+            console.log("Move", index);
+            updatedPayload = { ...action.payload, itemIndex: index };
+            if (
+                currentDo[currentDo.length - 1].type === Actions.CREATE_ELEMENT
+            ) {
+                lastAction = { ...action, payload: updatedPayload };
+                if (index != -1) {
+                    return {
+                        ...state,
+                        do: [...currentDo, lastAction]
+                    };
+                }
+            } else if (currentDo[currentDo.length - 1].type === Actions.MOVE) {
+                currentDo.pop();
+                lastAction = { ...action, payload: updatedPayload };
+                currentDo.push(lastAction);
+                if (index != -1) {
+                    return {
+                        ...state,
+                        do: currentDo
+                    };
+                }
+            }
+            return state;
         case Actions.DELETE_ELEMENT:
-        case Actions.MOVE_ELEMENT:
-            const index = getClosestElementIndex(action.payload.p1, currentDo);
-            const updatedPayload = { ...action.payload, itemIndex: index };
+            index = state.currentElement;
+            updatedPayload = { ...action.payload, itemIndex: index };
             lastAction = { ...action, payload: updatedPayload };
             if (index != -1) {
                 return {

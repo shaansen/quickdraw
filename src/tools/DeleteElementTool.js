@@ -3,25 +3,20 @@ export default class DeleteElementTool {
         props.dragStart(pos);
     }
 
+    handleMouseClick(props, pos) {
+        props.dragStart(pos);
+        props.deleteElementAction({
+            type: props.tool,
+            p1: props.interaction.dragFrom,
+            p2: pos
+        });
+    }
+
     handleMouseMove(props, pos) {
         if (props.interaction.dragFrom) {
-            props.createElementAction({
-                type: props.tool,
-                p1: props.interaction.dragFrom,
-                p2: pos,
-                isTransient: true
-            });
+            props.dragFinish();
         }
     }
 
-    handleMouseUp(props, pos) {
-        if (props.interaction.dragFrom) {
-            props.dragFinish();
-            props.deleteElementAction({
-                type: props.tool,
-                p1: props.interaction.dragFrom,
-                p2: pos
-            });
-        }
-    }
+    handleMouseUp(props, pos) {}
 }

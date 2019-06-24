@@ -19,6 +19,16 @@ export const createElementAction = payload => ({
     payload: { ...payload, id: nextElementId++ }
 });
 
+export const deleteElementAction = payload => ({
+    type: Actions.DELETE_ELEMENT,
+    payload: { ...payload, id: nextElementId++ }
+});
+
+export const moveElementAction = payload => ({
+    type: Actions.MOVE,
+    payload: { ...payload, id: nextElementId++ }
+});
+
 registerActionAsCommand(Actions.CREATE_ELEMENT, (action, elements) => {
     elements[action.payload.id] = createElement(
         action.payload.type,
@@ -26,21 +36,11 @@ registerActionAsCommand(Actions.CREATE_ELEMENT, (action, elements) => {
     );
 });
 
-export const deleteElementAction = payload => ({
-    type: Actions.DELETE_ELEMENT,
-    payload: { ...payload, id: nextElementId++ }
-});
-
 registerActionAsCommand(Actions.DELETE_ELEMENT, (action, elements) => {
     elements[action.payload.id] = deleteElement(
         action.payload.type,
         action.payload
     );
-});
-
-export const moveElementAction = payload => ({
-    type: Actions.MOVE,
-    payload: { ...payload, id: nextElementId++ }
 });
 
 registerActionAsCommand(Actions.MOVE, (action, elements) => {
@@ -55,8 +55,9 @@ export const dragStart = payload => ({
     payload
 });
 
-export const dragFinish = () => ({
-    type: Actions.DRAG_FINISH
+export const dragFinish = payload => ({
+    type: Actions.DRAG_FINISH,
+    payload
 });
 
 export const newDrawing = () => ({
