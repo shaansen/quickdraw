@@ -88,3 +88,22 @@ export const getNewCommands = (oldCommand, newCommand) => {
     };
     return updatedCommand;
 };
+
+export const performCleanup = allDos => {
+    let indexToClear = null;
+    if (allDos.length > 0 && allDos[allDos.length - 1].type === Actions.MOVE) {
+        const idx = allDos[allDos.length - 1].payload.itemIndex;
+        console.log("ItemToDelete", idx);
+        indexToClear = allDos.length - 2;
+        while (
+            indexToClear >= 0 &&
+            allDos[allDos.length - 1].type === Actions.MOVE &&
+            allDos[indexToClear].payload.itemIndex === idx
+        ) {
+            indexToClear--;
+        }
+    }
+    return indexToClear !== null
+        ? [...allDos.splice(0, indexToClear + 1), allDos[allDos.length - 1]]
+        : allDos;
+};

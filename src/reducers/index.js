@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { Actions } from "../actions";
 import { Elements } from "../elements";
-import { getElementToMoveIndex } from "./helpers";
+import { getElementToMoveIndex, performCleanup } from "./helpers";
 
 const commands = (
     state = { do: [], redo: [], transient: [], currentElement: null },
@@ -24,6 +24,7 @@ const commands = (
         case Actions.DRAG_FINISH:
             return {
                 ...state,
+                do: performCleanup(currentDo),
                 currentElement: null
             };
         case Actions.CREATE_ELEMENT:
@@ -39,26 +40,13 @@ const commands = (
         case Actions.MOVE:
             index = state.currentElement;
             updatedPayload = { ...action.payload, itemIndex: index };
-            if (
-                currentDo[currentDo.length - 1].type === Actions.CREATE_ELEMENT
-            ) {
-                lastAction = { ...action, payload: updatedPayload };
-                if (index !== -1) {
-                    return {
-                        ...state,
-                        do: [...currentDo, lastAction]
-                    };
-                }
-            } else if (currentDo[currentDo.length - 1].type === Actions.MOVE) {
-                currentDo.pop();
-                lastAction = { ...action, payload: updatedPayload };
-                currentDo.push(lastAction);
-                if (index !== -1) {
-                    return {
-                        ...state,
-                        do: currentDo
-                    };
-                }
+            lastAction = { ...action, payload: updatedPayload };
+            currentDo.push(lastAction);
+            if (index !== -1) {
+                return {
+                    ...state,
+                    do: currentDo
+                };
             }
             return state;
         case Actions.DELETE_ELEMENT:
