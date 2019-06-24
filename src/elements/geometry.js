@@ -39,3 +39,6 @@ export const nearOrOnRectangleEdges = (p, v, w) => {
 export const nearOrOnLine = (p, v, w) => {
     return distToSegment(p, v, w) < 10;
 };
+
+export const nearLineOrRect = (p, v, w) =>
+    nearOrOnRectangleEdges(p, v, w) || nearOrOnLine(p, v, w);

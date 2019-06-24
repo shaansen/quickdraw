@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 import { Actions } from "../actions";
 import { Elements } from "../elements";
-import { nearOrOnLine, nearOrOnRectangleEdges } from "../elements/geometry";
 import { getElementToMoveIndex } from "./helpers";
 
 const commands = (
@@ -39,7 +38,6 @@ const commands = (
             };
         case Actions.MOVE:
             index = state.currentElement;
-            console.log("Move", index);
             updatedPayload = { ...action.payload, itemIndex: index };
             if (
                 currentDo[currentDo.length - 1].type === Actions.CREATE_ELEMENT
