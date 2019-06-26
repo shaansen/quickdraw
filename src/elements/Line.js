@@ -1,4 +1,4 @@
-import { distToSegment } from "./geometry";
+import { distToSegment } from './geometry'
 
 const HIT_DISTANCE = 1.5;
 
